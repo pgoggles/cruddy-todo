@@ -11,18 +11,18 @@ exports.create = (text, callback) => {
 // updating number
 
   //Read Id from counter.txt
-  var callbackFunction = function (counterString) {
+  var callbackFunction = function (err, counterString) {
     fs.writeFile(exports.dataDir + '/' + counterString + '.txt', text, (err) => {
       if (err) {
         throw ('error writing todo');
       } else {
-        console.log('Wrote Todo to File');
+        callback(null, { id: counterString, text }); /// {id: id, text: text}
       }
     });
   };
   counter.getNextUniqueId(callbackFunction);
   // items[id] = text;
-  // callback(null, { id, text });
+
 };
 
 exports.readAll = (callback) => {
@@ -33,22 +33,29 @@ exports.readAll = (callback) => {
 };
 
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  fs.readFile(exports.dataDir + '/' + id + '.txt', 'utf8', (err, text) => {
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      callback(null, { id, text });
+    }
+  });
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  fs.access(exports.dataDir + '/' + id + '.txt', (err) => {
+    if (err) {
+      callback(new Error(`No item with id: ${id}`));
+    } else {
+      fs.writeFile(exports.dataDir + '/' + id + '.txt', text, (err) => {
+        if (err) {
+          callback(new Error(`No item with id: ${id}`));
+        } else {
+          callback(null, { id, text });
+        }
+      });
+    }
+  });
 };
 
 exports.delete = (id, callback) => {

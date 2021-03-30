@@ -40,7 +40,13 @@ const writeCounter = (count, callback) => {
 // Public API - Fix this function //////////////////////////////////////////////
 
 exports.getNextUniqueId = (callbackFunction) => {
-  readCounter((nullVar, counter) => { writeCounter(counter + 1, (nullVar2, counterString) => { callbackFunction(counterString); }); });
+  readCounter((err, counter) => {
+    if (err) {
+      throw ('error reading counter');
+    } else {
+      writeCounter(counter + 1, callbackFunction);
+    }
+  });
 };
 
 
