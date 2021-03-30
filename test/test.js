@@ -107,7 +107,7 @@ describe('todos', () => {
   });
 
   describe('readAll', () => {
-    xit('should return an empty array when there are no todos', (done) => {
+    it('should return an empty array when there are no todos', (done) => {
       todos.readAll((err, todoList) => {
         expect(err).to.be.null;
         expect(todoList.length).to.equal(0);
@@ -116,10 +116,10 @@ describe('todos', () => {
     });
 
     // Refactor this test when completing `readAll`
-    xit('should return an array with all saved todos', (done) => {
+    it('should return an array with all saved todos', (done) => {
       const todo1text = 'todo 1';
       const todo2text = 'todo 2';
-      const expectedTodoList = [{ id: '00001', text: '00001' }, { id: '00002', text: '00002' }];
+      const expectedTodoList = [{ id: '00001', text: 'todo 1' }, { id: '00002', text: 'todo 2' }];
       todos.create(todo1text, (err, todo) => {
         todos.create(todo2text, (err, todo) => {
           todos.readAll((err, todoList) => {
