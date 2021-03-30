@@ -8,9 +8,21 @@ var items = {};
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
-  var id = counter.getNextUniqueId();
-  items[id] = text;
-  callback(null, { id, text });
+// updating number
+
+  //Read Id from counter.txt
+  var callbackFunction = function (counterString) {
+    fs.writeFile(exports.dataDir + '/' + counterString + '.txt', text, (err) => {
+      if (err) {
+        throw ('error writing todo');
+      } else {
+        console.log('Wrote Todo to File');
+      }
+    });
+  };
+  counter.getNextUniqueId(callbackFunction);
+  // items[id] = text;
+  // callback(null, { id, text });
 };
 
 exports.readAll = (callback) => {
@@ -53,6 +65,7 @@ exports.delete = (id, callback) => {
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
 
 exports.dataDir = path.join(__dirname, 'data');
+
 
 exports.initialize = () => {
   if (!fs.existsSync(exports.dataDir)) {

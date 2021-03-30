@@ -11,6 +11,7 @@ var counter = 0;
 // Wikipedia entry on Leading Zeros and check out some of code links:
 // https://www.google.com/search?q=what+is+a+zero+padded+number%3F
 
+
 const zeroPaddedNumber = (num) => {
   return sprintf('%05d', num);
 };
@@ -38,11 +39,9 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+exports.getNextUniqueId = (callbackFunction) => {
+  readCounter((nullVar, counter) => { writeCounter(counter + 1, (nullVar2, counterString) => { callbackFunction(counterString); }); });
 };
-
 
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
